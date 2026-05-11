@@ -8,16 +8,17 @@
         :root {
             --main-green: #1b5e20;
             --accent-green: #25d366;
-            --discount-red: #d32f2f;
+            --bg-light: #f4f7f6;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: var(--bg-light);
         }
 
+        /* البار العلوي الأصلي */
         .navbar {
             background-color: white;
             padding: 12px 5%;
@@ -30,21 +31,43 @@
             z-index: 1000;
         }
 
-        .logo-area { display: flex; align-items: center; gap: 8px; }
-        .logo-text { font-weight: 900; font-size: 24px; color: #1b5e20; }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
 
+        .nav-links li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .nav-links li a.active {
+            background-color: var(--main-green);
+            color: white;
+        }
+
+        .logo-text { font-weight: 900; font-size: 24px; color: #1b5e20; cursor: pointer; }
+
+        /* قسم الهيرو */
         .hero {
             background-color: var(--main-green);
             color: white;
-            padding: 50px 20px;
+            padding: 40px 20px;
             text-align: center;
         }
 
         .search-box { max-width: 500px; margin: 20px auto 0; }
         .search-box input {
             width: 100%;
-            padding: 15px 25px;
-            border-radius: 30px;
+            padding: 12px 20px;
+            border-radius: 25px;
             border: none;
             outline: none;
         }
@@ -52,83 +75,89 @@
         /* لوحة التحكم */
         #admin-panel {
             display: none;
-            background: #fff;
+            background: white;
             margin: 20px 5%;
-            padding: 25px;
-            border-radius: 15px;
-            border: 3px solid var(--main-green);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--main-green);
         }
 
         .admin-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
         }
 
-        .admin-input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        .admin-input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
 
-        /* الكروت والمنتجات */
+        /* شبكة المنتجات - المربعات */
         .products-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 40px 5%;
+            grid-template-columns: repeat(2, 1fr); /* اتنين جنب بعض في الموبايل */
+            gap: 15px;
+            padding: 20px 5%;
+        }
+
+        /* للأجهزة الأكبر (كمبيوتر) يظهر 3 أو 4 جنب بعض */
+        @media (min-width: 768px) {
+            .products-container { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
         }
 
         .card {
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
+            transition: 0.3s;
         }
 
-        /* معرض الصور داخل الكرت */
-        .image-container { position: relative; width: 100%; height: 300px; }
-        .main-img { width: 100%; height: 100%; object-fit: cover; }
-        .thumb-bar {
-            display: flex;
-            gap: 5px;
-            padding: 10px;
-            overflow-x: auto;
-            background: #eee;
-        }
-        .thumb-bar img { width: 50px; height: 50px; cursor: pointer; object-fit: cover; border-radius: 5px; }
-
-        .card-body { padding: 20px; }
-        .price-area { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
-        .old-price { text-decoration: line-through; color: #888; font-size: 0.9rem; }
-        .new-price { color: var(--main-green); font-size: 1.5rem; font-weight: bold; }
-
-        .option-label { font-weight: bold; display: block; margin-top: 15px; font-size: 0.9rem; }
-        .size-select, .color-select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
+        .image-box { position: relative; width: 100%; padding-top: 100%; /* مربع كامل */ }
+        .image-box img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
         }
 
-        .reviews-section {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-            font-size: 0.85rem;
-            color: #555;
+        .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-title { font-size: 1rem; margin: 5px 0; color: #333; height: 40px; overflow: hidden; }
+
+        .price-tag { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .new-price { color: var(--main-green); font-weight: bold; font-size: 1.1rem; }
+        .old-price { color: #999; text-decoration: line-through; font-size: 0.85rem; }
+
+        /* خيارات المقاس واللون */
+        .select-box {
+            font-size: 0.8rem;
+            padding: 5px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+            background: #fafafa;
         }
 
-        .buy-now {
+        .buy-btn {
             background-color: var(--accent-green);
             color: white;
             text-decoration: none;
-            padding: 15px;
-            border-radius: 10px;
-            display: block;
+            padding: 10px;
+            border-radius: 8px;
             text-align: center;
             font-weight: bold;
-            margin-top: 15px;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
         }
+
+        .thumb-nav {
+            display: flex;
+            gap: 4px;
+            padding: 5px;
+            background: #f9f9f9;
+            overflow-x: auto;
+        }
+        .thumb-nav img { width: 35px; height: 35px; object-fit: cover; border-radius: 3px; cursor: pointer; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
@@ -137,32 +166,35 @@
         <div class="logo-area">
             <span class="logo-text" onclick="adminCheck()">GOAT S</span>
         </div>
-        <div style="font-weight: bold; color: #333;">قسم الدروب شيبنج</div>
+        <ul class="nav-links">
+            <li><a class="active">المنتجات</a></li>
+            <li><a>الطلبات</a></li>
+        </ul>
     </nav>
 
     <div class="hero">
         <h1>GOAT S</h1>
-        <p>أفضل جودة وأسرع شحن في مصر</p>
+        <p>جودة تستحقها وسعر يناسبك</p>
         <div class="search-box">
-            <input type="text" placeholder="ابحث عن حذاء أو مقاس...">
+            <input type="text" placeholder="ابحث عن الموديل...">
         </div>
     </div>
 
     <div id="admin-panel">
-        <h2 style="color: var(--main-green);">إضافة منتج جديد 🛠️</h2>
+        <h3>لوحة التحكم 🔒</h3>
         <div class="admin-grid">
             <input type="text" id="pName" class="admin-input" placeholder="اسم المنتج">
-            <input type="text" id="pPrice" class="admin-input" placeholder="السعر بعد الخصم">
-            <input type="text" id="pOldPrice" class="admin-input" placeholder="السعر قبل الخصم (اختياري)">
-            <input type="text" id="pImgs" class="admin-input" placeholder="روابط الصور (افصل بفاصلة ,)">
-            <input type="text" id="pColors" class="admin-input" placeholder="الألوان (مثلاً: أسود, أبيض)">
-            <input type="text" id="pReview" class="admin-input" placeholder="رأي عميل (تجريبي)">
-            <button onclick="addNewProduct()" class="btn-save" style="background: var(--main-green); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">حفظ ✅</button>
-            <button onclick="clearAll()" style="background:#d32f2f; color:white; border:none; border-radius:8px; cursor:pointer;">مسح الكل 🗑️</button>
+            <input type="text" id="pPrice" class="admin-input" placeholder="السعر">
+            <input type="text" id="pOldPrice" class="admin-input" placeholder="السعر قبل الخصم">
+            <input type="text" id="pImgs" class="admin-input" placeholder="روابط الصور (فاصلة ,)">
+            <input type="text" id="pColors" class="admin-input" placeholder="الألوان (فاصلة ,)">
+            <button onclick="addNewProduct()" class="btn-save" style="background:var(--main-green); color:white; border:none; cursor:pointer; border-radius:5px;">إضافة</button>
+            <button onclick="clearAll()" style="background:#d32f2f; color:white; border:none; border-radius:5px; cursor:pointer;">مسح الكل</button>
         </div>
     </div>
 
-    <div class="products-container" id="grid"></div>
+    <div class="products-container" id="grid">
+        </div>
 
     <script>
         const phone = "201032306218";
@@ -179,15 +211,13 @@
             }
         }
 
-        // قاعدة البيانات مع دعم الخصائص الجديدة
-        let products = JSON.parse(localStorage.getItem('goat_db_v2')) || [
+        let products = JSON.parse(localStorage.getItem('goat_db_final')) || [
             { 
-                name: "نايك جوردان وان", 
-                price: "1800", 
-                oldPrice: "2500",
+                name: "نايك اير فوم", 
+                price: "1200", 
+                oldPrice: "1800",
                 images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff"],
-                colors: ["أحمر", "أسود"],
-                review: "خامة ممتازة وتوصيل سريع جداً"
+                colors: ["أسود", "أبيض"]
             }
         ];
 
@@ -196,93 +226,60 @@
             grid.innerHTML = "";
             
             products.forEach((p, index) => {
-                // توليد المقاسات من 36 لـ 45
-                let sizeOptions = "";
-                for(let i=36; i<=45; i++) { sizeOptions += `<option value="${i}">${i}</option>`; }
-
-                // توليد الألوان
-                let colorOptions = p.colors.map(c => `<option value="${c}">${c}</option>`).join('');
-
-                // توليد الصور المصغرة
-                let thumbs = p.images.map(img => `<img src="${img}" onclick="changeImg(${index}, '${img}')">`).join('');
+                let sizes = "";
+                for(let i=36; i<=45; i++) { sizes += `<option value="${i}">${i}</option>`; }
+                
+                let colors = p.colors.map(c => `<option value="${c}">${c}</option>`).join('');
+                let thumbs = p.images.map(img => `<img src="${img}" onclick="document.getElementById('main-${index}').src='${img}'">`).join('');
 
                 grid.innerHTML += `
                     <div class="card">
-                        <div class="image-container">
-                            <img src="${p.images[0]}" id="main-${index}" class="main-img">
+                        <div class="image-box">
+                            <img src="${p.images[0]}" id="main-${index}">
                         </div>
-                        <div class="thumb-bar">${thumbs}</div>
-                        
+                        <div class="thumb-nav">${thumbs}</div>
                         <div class="card-body">
-                            <h3 style="margin:0">${p.name}</h3>
-                            
-                            <div class="price-area">
+                            <h3 class="card-title">${p.name}</h3>
+                            <div class="price-tag">
                                 <span class="new-price">${p.price} ج.م</span>
-                                ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
+                                ${p.oldPrice ? `<span class="old-price">${p.oldPrice}</span>` : ''}
                             </div>
-
-                            <label class="option-label">اختر المقاس:</label>
-                            <select class="size-select" id="size-${index}">${sizeOptions}</select>
-
-                            <label class="option-label">اختر اللون:</label>
-                            <select class="color-select" id="color-${index}">${colorOptions}</select>
-
-                            <div class="reviews-section">
-                                <strong>⭐ آراء العملاء:</strong>
-                                <p>"${p.review || 'منتج رائع جداً وأنصح به'}"</p>
-                            </div>
-
-                            <button onclick="sendOrder(${index})" class="buy-now">اطلب عبر واتساب 💬</button>
+                            
+                            <select class="select-box" id="size-${index}">${sizes}</select>
+                            <select class="select-box" id="color-${index}">${colors}</select>
+                            
+                            <button onclick="sendOrder(${index})" class="buy-btn">طلب واتساب</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        function changeImg(index, src) {
-            document.getElementById(`main-${index}`).src = src;
-        }
-
         function addNewProduct() {
-            const name = document.getElementById('pName').value;
-            const price = document.getElementById('pPrice').value;
-            const oldPrice = document.getElementById('pOldPrice').value;
+            const n = document.getElementById('pName').value;
+            const p = document.getElementById('pPrice').value;
+            const op = document.getElementById('pOldPrice').value;
             const imgs = document.getElementById('pImgs').value.split(',');
-            const colors = document.getElementById('pColors').value.split(',');
-            const review = document.getElementById('pReview').value;
+            const cols = document.getElementById('pColors').value.split(',');
 
-            if(name && price && imgs[0]) {
-                products.push({
-                    name: name, 
-                    price: price, 
-                    oldPrice: oldPrice, 
-                    images: imgs, 
-                    colors: colors, 
-                    review: review
-                });
-                localStorage.setItem('goat_db_v2', JSON.stringify(products));
+            if(n && p && imgs[0]) {
+                products.push({name: n, price: p, oldPrice: op, images: imgs, colors: cols});
+                localStorage.setItem('goat_db_final', JSON.stringify(products));
                 render();
-                alert("تمت إضافة المنتج بنجاح!");
+                alert("تم!");
             }
         }
 
         function sendOrder(index) {
             const p = products[index];
-            const size = document.getElementById(`size-${index}`).value;
-            const color = document.getElementById(`color-${index}`).value;
-            const text = `طلب جديد من المتجر:
-المنتج: ${p.name}
-السعر: ${p.price} ج.م
-المقاس: ${size}
-اللون: ${color}`;
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+            const s = document.getElementById(`size-${index}`).value;
+            const c = document.getElementById(`color-${index}`).value;
+            const text = `طلب جديد:\nالمنتج: ${p.name}\nالمقاس: ${s}\nاللون: ${c}`;
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`);
         }
 
         function clearAll() {
-            if(confirm("مسح كل المنتجات؟")) {
-                localStorage.removeItem('goat_db_v2');
-                location.reload();
-            }
+            if(confirm("مسح الكل؟")) { localStorage.removeItem('goat_db_final'); location.reload(); }
         }
 
         render();
