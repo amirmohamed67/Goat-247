@@ -8,6 +8,7 @@
         :root {
             --main-green: #1b5e20;
             --accent-green: #25d366;
+            --discount-red: #d32f2f;
         }
 
         body {
@@ -17,7 +18,6 @@
             background-color: #f8f9fa;
         }
 
-        /* البار العلوي المعدل */
         .navbar {
             background-color: white;
             padding: 12px 5%;
@@ -30,41 +30,9 @@
             z-index: 1000;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
+        .logo-area { display: flex; align-items: center; gap: 8px; }
+        .logo-text { font-weight: 900; font-size: 24px; color: #1b5e20; }
 
-        .nav-links li a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 5px;
-        }
-
-        .nav-links li a.active {
-            background-color: var(--main-green);
-            color: white;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo-text {
-            font-weight: 900;
-            font-size: 24px;
-            color: #1b5e20;
-        }
-
-        /* قسم الترحيب والبحث */
         .hero {
             background-color: var(--main-green);
             color: white;
@@ -72,60 +40,37 @@
             text-align: center;
         }
 
-        .hero h1 { font-size: 3.5rem; margin: 0; }
-        .hero p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 25px; }
-
-        .search-box {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
+        .search-box { max-width: 500px; margin: 20px auto 0; }
         .search-box input {
             width: 100%;
             padding: 15px 25px;
             border-radius: 30px;
             border: none;
             outline: none;
-            font-size: 1rem;
         }
 
-        /* لوحة التحكم المخفية */
+        /* لوحة التحكم */
         #admin-panel {
-            display: none; /* مخفية تماماً */
+            display: none;
             background: #fff;
             margin: 20px 5%;
             padding: 25px;
             border-radius: 15px;
             border: 3px solid var(--main-green);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
+            gap: 15px;
         }
 
-        .admin-input {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
+        .admin-input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
 
-        .btn-save {
-            background: var(--main-green);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* شبكة المنتجات */
+        /* الكروت والمنتجات */
         .products-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
             padding: 40px 5%;
         }
@@ -135,29 +80,54 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
-        .card:hover { transform: translateY(-10px); }
+        /* معرض الصور داخل الكرت */
+        .image-container { position: relative; width: 100%; height: 300px; }
+        .main-img { width: 100%; height: 100%; object-fit: cover; }
+        .thumb-bar {
+            display: flex;
+            gap: 5px;
+            padding: 10px;
+            overflow-x: auto;
+            background: #eee;
+        }
+        .thumb-bar img { width: 50px; height: 50px; cursor: pointer; object-fit: cover; border-radius: 5px; }
 
-        .card img {
+        .card-body { padding: 20px; }
+        .price-area { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .old-price { text-decoration: line-through; color: #888; font-size: 0.9rem; }
+        .new-price { color: var(--main-green); font-size: 1.5rem; font-weight: bold; }
+
+        .option-label { font-weight: bold; display: block; margin-top: 15px; font-size: 0.9rem; }
+        .size-select, .color-select {
             width: 100%;
-            height: 280px;
-            object-fit: cover;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
         }
 
-        .card-body { padding: 20px; text-align: center; }
-        .card-title { font-size: 1.2rem; margin: 10px 0; color: #333; }
-        .card-price { color: var(--main-green); font-size: 1.4rem; font-weight: 800; margin-bottom: 15px; }
+        .reviews-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.85rem;
+            color: #555;
+        }
 
         .buy-now {
             background-color: var(--accent-green);
             color: white;
             text-decoration: none;
-            padding: 12px;
+            padding: 15px;
             border-radius: 10px;
             display: block;
+            text-align: center;
             font-weight: bold;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -165,94 +135,152 @@
 
     <nav class="navbar">
         <div class="logo-area">
-            <span class="logo-text">GOAT S</span>
-            <span style="font-size: 14px; color: #666;">| متجرك الرياضي</span>
+            <span class="logo-text" onclick="adminCheck()">GOAT S</span>
         </div>
-        <ul class="nav-links">
-            <li><a onclick="adminCheck()" class="active">المنتجات</a></li>
-            <li><a>الطلبات</a></li>
-        </ul>
+        <div style="font-weight: bold; color: #333;">قسم الدروب شيبنج</div>
     </nav>
 
     <div class="hero">
         <h1>GOAT S</h1>
-        <p>أفضل الأحذية والملابس الرياضية - الجودة هي هدفنا</p>
+        <p>أفضل جودة وأسرع شحن في مصر</p>
         <div class="search-box">
-            <input type="text" placeholder="ابحث عن موديل، مقاس، أو ماركة...">
+            <input type="text" placeholder="ابحث عن حذاء أو مقاس...">
         </div>
     </div>
 
     <div id="admin-panel">
-        <h2 style="margin-top:0; color: var(--main-green);">لوحة تحكم المدير 🔒</h2>
+        <h2 style="color: var(--main-green);">إضافة منتج جديد 🛠️</h2>
         <div class="admin-grid">
             <input type="text" id="pName" class="admin-input" placeholder="اسم المنتج">
-            <input type="text" id="pPrice" class="admin-input" placeholder="السعر (مثال: 1200 ج.م)">
-            <input type="text" id="pImg" class="admin-input" placeholder="رابط الصورة المباشر">
-            <button onclick="addNewProduct()" class="btn-save">إضافة للمتجر ✅</button>
+            <input type="text" id="pPrice" class="admin-input" placeholder="السعر بعد الخصم">
+            <input type="text" id="pOldPrice" class="admin-input" placeholder="السعر قبل الخصم (اختياري)">
+            <input type="text" id="pImgs" class="admin-input" placeholder="روابط الصور (افصل بفاصلة ,)">
+            <input type="text" id="pColors" class="admin-input" placeholder="الألوان (مثلاً: أسود, أبيض)">
+            <input type="text" id="pReview" class="admin-input" placeholder="رأي عميل (تجريبي)">
+            <button onclick="addNewProduct()" class="btn-save" style="background: var(--main-green); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">حفظ ✅</button>
             <button onclick="clearAll()" style="background:#d32f2f; color:white; border:none; border-radius:8px; cursor:pointer;">مسح الكل 🗑️</button>
         </div>
     </div>
 
-    <div class="products-container" id="grid">
-        </div>
+    <div class="products-container" id="grid"></div>
 
     <script>
         const phone = "201032306218";
         let clickCount = 0;
 
-        // الدخول السري للوحة التحكم
         function adminCheck() {
             clickCount++;
             if (clickCount === 3) {
-                let pass = prompt("أدخل كلمة السر (رقم تليفونك):");
+                let pass = prompt("كلمة السر:");
                 if (pass === "01032306218") {
                     document.getElementById('admin-panel').style.display = 'block';
-                    window.scrollTo(0, 0);
-                } else {
-                    alert("كلمة السر خطأ!");
                 }
                 clickCount = 0;
             }
         }
 
-        // قاعدة البيانات (مخزنة في المتصفح)
-        let products = JSON.parse(localStorage.getItem('goat_db')) || [
-            { name: "نايك اير جوردان", price: "2,500 ج.م", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff" }
+        // قاعدة البيانات مع دعم الخصائص الجديدة
+        let products = JSON.parse(localStorage.getItem('goat_db_v2')) || [
+            { 
+                name: "نايك جوردان وان", 
+                price: "1800", 
+                oldPrice: "2500",
+                images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff"],
+                colors: ["أحمر", "أسود"],
+                review: "خامة ممتازة وتوصيل سريع جداً"
+            }
         ];
 
         function render() {
             const grid = document.getElementById('grid');
             grid.innerHTML = "";
-            products.forEach((p) => {
-                const waLink = `https://wa.me/${phone}?text=${encodeURIComponent('أهلاً، أريد طلب: ' + p.name)}`;
+            
+            products.forEach((p, index) => {
+                // توليد المقاسات من 36 لـ 45
+                let sizeOptions = "";
+                for(let i=36; i<=45; i++) { sizeOptions += `<option value="${i}">${i}</option>`; }
+
+                // توليد الألوان
+                let colorOptions = p.colors.map(c => `<option value="${c}">${c}</option>`).join('');
+
+                // توليد الصور المصغرة
+                let thumbs = p.images.map(img => `<img src="${img}" onclick="changeImg(${index}, '${img}')">`).join('');
+
                 grid.innerHTML += `
                     <div class="card">
-                        <img src="${p.img}" alt="${p.name}">
+                        <div class="image-container">
+                            <img src="${p.images[0]}" id="main-${index}" class="main-img">
+                        </div>
+                        <div class="thumb-bar">${thumbs}</div>
+                        
                         <div class="card-body">
-                            <h3 class="card-title">${p.name}</h3>
-                            <div class="card-price">${p.price}</div>
-                            <a href="${waLink}" target="_blank" class="buy-now">اشتري الآن (واتساب)</a>
+                            <h3 style="margin:0">${p.name}</h3>
+                            
+                            <div class="price-area">
+                                <span class="new-price">${p.price} ج.م</span>
+                                ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
+                            </div>
+
+                            <label class="option-label">اختر المقاس:</label>
+                            <select class="size-select" id="size-${index}">${sizeOptions}</select>
+
+                            <label class="option-label">اختر اللون:</label>
+                            <select class="color-select" id="color-${index}">${colorOptions}</select>
+
+                            <div class="reviews-section">
+                                <strong>⭐ آراء العملاء:</strong>
+                                <p>"${p.review || 'منتج رائع جداً وأنصح به'}"</p>
+                            </div>
+
+                            <button onclick="sendOrder(${index})" class="buy-now">اطلب عبر واتساب 💬</button>
                         </div>
                     </div>
                 `;
             });
         }
 
+        function changeImg(index, src) {
+            document.getElementById(`main-${index}`).src = src;
+        }
+
         function addNewProduct() {
-            const n = document.getElementById('pName').value;
-            const p = document.getElementById('pPrice').value;
-            const i = document.getElementById('pImg').value;
-            if(n && p && i) {
-                products.push({name: n, price: p, img: i});
-                localStorage.setItem('goat_db', JSON.stringify(products));
+            const name = document.getElementById('pName').value;
+            const price = document.getElementById('pPrice').value;
+            const oldPrice = document.getElementById('pOldPrice').value;
+            const imgs = document.getElementById('pImgs').value.split(',');
+            const colors = document.getElementById('pColors').value.split(',');
+            const review = document.getElementById('pReview').value;
+
+            if(name && price && imgs[0]) {
+                products.push({
+                    name: name, 
+                    price: price, 
+                    oldPrice: oldPrice, 
+                    images: imgs, 
+                    colors: colors, 
+                    review: review
+                });
+                localStorage.setItem('goat_db_v2', JSON.stringify(products));
                 render();
-                alert("تمت الإضافة!");
+                alert("تمت إضافة المنتج بنجاح!");
             }
         }
 
+        function sendOrder(index) {
+            const p = products[index];
+            const size = document.getElementById(`size-${index}`).value;
+            const color = document.getElementById(`color-${index}`).value;
+            const text = `طلب جديد من المتجر:
+المنتج: ${p.name}
+السعر: ${p.price} ج.م
+المقاس: ${size}
+اللون: ${color}`;
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
         function clearAll() {
-            if(confirm("هل أنت متأكد من مسح كل المنتجات؟")) {
-                localStorage.removeItem('goat_db');
+            if(confirm("مسح كل المنتجات؟")) {
+                localStorage.removeItem('goat_db_v2');
                 location.reload();
             }
         }
