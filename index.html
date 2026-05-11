@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOAT S - أفضل الأحذية والملابس الرياضية</title>
+    <style>
+        :root {
+            --main-green: #1b5e20; /* اللون الأخضر اللي في صورتك */
+            --light-green: #2e7d32;
+            --accent-green: #25d366; /* لون الواتساب */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+
+        /* البار العلوي - Navigation */
+        .navbar {
+            background-color: white;
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links li a.active {
+            background-color: var(--main-green);
+            color: white;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-weight: bold;
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* القسم الأخضر الكبير - Hero Section */
+        .hero {
+            background-color: var(--main-green);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin: 10px 0 25px;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        /* تصنيفات المنتجات */
+        .categories {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cat-btn {
+            padding: 8px 25px;
+            border-radius: 20px;
+            border: none;
+            background: #e0e0e0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cat-btn.active {
+            background: var(--main-green);
+            color: white;
+        }
+
+        /* شبكة المنتجات */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px 5%;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-price {
+            color: var(--main-green);
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .whatsapp-btn {
+            background-color: var(--accent-green);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: block;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128c7e;
+        }
+
+        /* لوحة التحكم المخفية */
+        #admin-panel {
+            display: none;
+            background: white;
+            margin: 20px 5%;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px dashed var(--main-green);
+        }
+
+        .admin-input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo-area">
+            <span class="logo-text">GOAT S</span>
+            <span style="font-size: 12px;">⚽ أحذية وملابس رياضية</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">المنتجات</a></li>
+            <li><a href="#" onclick="toggleAdmin()">إضافة منتج</a></li>
+            <li><a href="#">مشاركة منتج</a></li>
+            <li><a href="#">منتجاتي</a></li>
+            <li><a href="#">الطلبات</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <h1>GOAT S</h1>
+        <p>أفضل الأحذية والملابس الرياضية</p>
+        <div class="search-container">
+            <input type="text" placeholder="ابحث عن منتج أو ماركة...">
+        </div>
+    </div>
+
+    <div id="admin-panel">
+        <h3>إضافة قطعة جديدة للمتجر</h3>
+        <input type="text" id="pName" class="admin-input" placeholder="اسم المنتج">
+        <input type="text" id="pPrice" class="admin-input" placeholder="السعر (مثال: 1500 ج.م)">
+        <input type="text" id="pImg" class="admin-input" placeholder="رابط الصورة المباشر">
+        <button onclick="saveProduct()" style="padding:10px 20px; cursor:pointer;">حفظ المنتج</button>
+    </div>
+
+    <div class="categories">
+        <button class="cat-btn active">الكل</button>
+        <button class="cat-btn">أحذية</button>
+        <button class="cat-btn">ملابس</button>
+    </div>
+
+    <div class="products-grid" id="products-container">
+        </div>
+
+    <script>
+        const myWhatsApp = "201032306218";
+        
+        // بيانات تجريبية (أول ما تفتح الموقع)
+        let products = JSON.parse(localStorage.getItem('goatProducts')) || [
+            {
+                name: "سويت شيرت نايك أسود",
+                price: "850 ج.م",
+                img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=600"
+            },
+            {
+                name: "حذاء كرة قدم احترافي",
+                price: "2100 ج.م",
+                img: "https://images.unsplash.com/photo-1511886929837-354d827aae26?q=80&w=600"
+            }
+        ];
+
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            container.innerHTML = "";
+            products.forEach(p => {
+                const msg = encodeURIComponent(`أهلاً GOAT S، أريد طلب: ${p.name} بسعر ${p.price}`);
+                container.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.img}" alt="${p.name}">
+                        <div class="product-info">
+                            <h3>${p.name}</h3>
+                            <p class="product-price">${p.price}</p>
+                            <a href="https://wa.me/${myWhatsApp}?text=${msg}" target="_blank" class="whatsapp-btn">اشتري الآن عبر واتساب</a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleAdmin() {
+            const panel = document.getElementById('admin-panel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('pName').value;
+            const price = document.getElementById('pPrice').value;
+            const img = document.getElementById('pImg').value;
+            
+            if(name && price && img) {
+                products.push({name, price, img});
+                localStorage.setItem('goatProducts', JSON.stringify(products));
+                renderProducts();
+                toggleAdmin();
+                alert("تمت إضافة المنتج بنجاح!");
+            } else {
+                alert("برجاء ملء كل البيانات");
+            }
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
