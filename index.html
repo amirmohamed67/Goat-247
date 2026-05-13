@@ -195,94 +195,95 @@
 
     <div class="products-container" id="grid">
         </div>
+        <script type="module">
+ <script type="module">
+  // 1. استيراد مكتبات Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, push, onValue } 
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    <script>
-        const phone = "201032306218";
-        let clickCount = 0;
+  // 2. إعدادات Firebase الخاصة بمشروعك (تم التحديث ببياناتك)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCZp9qxNw7zB9WCL9voaks9YGYhEFyzI3k",
+    authDomain: "goat247-f8bf4.firebaseapp.com",
+    projectId: "goat247-f8bf4",
+    storageBucket: "goat247-f8bf4.firebasestorage.app",
+    messagingSenderId: "386511384272",
+    appId: "1:386511384272:web:a07bba2be1e085528478d5",
+    measurementId: "G-8BCKL66XDZ"
+  };
 
-        function adminCheck() {
-            clickCount++;
-            if (clickCount === 3) {
-                let pass = prompt("كلمة السر:");
-                if (pass === "01032306218") {
-                    document.getElementById('admin-panel').style.display = 'block';
-                }
-                clickCount = 0;
-            }
-        }
+  // 3. تشغيل Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const productsRef = ref(db, 'products');
 
-        let products = JSON.parse(localStorage.getItem('goat_db_final')) || [
-            { 
-                name: "نايك اير فوم", 
-                price: "1200", 
-                oldPrice: "1800",
-                images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff"],
-                colors: ["أسود", "أبيض"]
-            }
-        ];
+  // 4. وظيفة إضافة منتج جديد (من لوحة الإدارة)
+  window.addNewProduct = function() {
+    const name = document.getElementById('pName').value;
+    const price = document.getElementById('pPrice').value;
+    const oldPrice = document.getElementById('pOldPrice').value;
+    const images = document.getElementById('pImgs').value.split(',').map(img => img.trim());
+    const colors = document.getElementById('pColors').value.split(',').map(col => col.trim());
 
-        function render() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = "";
-            
-            products.forEach((p, index) => {
-                let sizes = "";
-                for(let i=36; i<=45; i++) { sizes += `<option value="${i}">${i}</option>`; }
-                
-                let colors = p.colors.map(c => `<option value="${c}">${c}</option>`).join('');
-                let thumbs = p.images.map(img => `<img src="${img}" onclick="document.getElementById('main-${index}').src='${img}'">`).join('');
+    if(name && price && images[0]) {
+      push(productsRef, {
+        name: name,
+        price: price,
+        oldPrice: oldPrice,
+        images: images,
+        colors: colors
+      }).then(() => {
+        alert("مبروك! المنتج اتضاف وه يظهر لكل الزبائن حالاً");
+        // تنظيف الخانات وإخفاء اللوحة
+        document.getElementById('pName').value = "";
+        document.getElementById('pPrice').value = "";
+        document.getElementById('admin-panel').style.display = 'none';
+      }).catch((error) => {
+        console.error("في مشكلة حصلت: ", error);
+      });
+    } else {
+      alert("يا ريس لازم تملا الاسم والسعر وصورة واحدة على الأقل");
+    }
+  };
 
-                grid.innerHTML += `
-                    <div class="card">
-                        <div class="image-box">
-                            <img src="${p.images[0]}" id="main-${index}">
-                        </div>
-                        <div class="thumb-nav">${thumbs}</div>
-                        <div class="card-body">
-                            <h3 class="card-title">${p.name}</h3>
-                            <div class="price-tag">
-                                <span class="new-price">${p.price} ج.م</span>
-                                ${p.oldPrice ? `<span class="old-price">${p.oldPrice}</span>` : ''}
-                            </div>
-                            
-                            <select class="select-box" id="size-${index}">${sizes}</select>
-                            <select class="select-box" id="color-${index}">${colors}</select>
-                            
-                            <button onclick="sendOrder(${index})" class="buy-btn">طلب واتساب</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+  // 5. عرض المنتجات وتحديثها تلقائياً عند أي تغيير
+  onValue(productsRef, (snapshot) => {
+    const data = snapshot.val();
+    const grid = document.getElementById('grid');
+    if (!grid) return;
+    
+    grid.innerHTML = ""; // مسح القديم
+    
+    if (data) {
+      Object.keys(data).forEach((key) => {
+        const p = data[key];
+        renderProductCard(p, key);
+      });
+    } else {
+      grid.innerHTML = "<p style='text-align:center; width:100%; color:#888;'>لا يوجد منتجات معروضة حالياً.</p>";
+    }
+  });
 
-        function addNewProduct() {
-            const n = document.getElementById('pName').value;
-            const p = document.getElementById('pPrice').value;
-            const op = document.getElementById('pOldPrice').value;
-            const imgs = document.getElementById('pImgs').value.split(',');
-            const cols = document.getElementById('pColors').value.split(',');
-
-            if(n && p && imgs[0]) {
-                products.push({name: n, price: p, oldPrice: op, images: imgs, colors: cols});
-                localStorage.setItem('goat_db_final', JSON.stringify(products));
-                render();
-                alert("تم!");
-            }
-        }
-
-        function sendOrder(index) {
-            const p = products[index];
-            const s = document.getElementById(`size-${index}`).value;
-            const c = document.getElementById(`color-${index}`).value;
-            const text = `طلب جديد:\nالمنتج: ${p.name}\nالمقاس: ${s}\nاللون: ${c}`;
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`);
-        }
-
-        function clearAll() {
-            if(confirm("مسح الكل؟")) { localStorage.removeItem('goat_db_final'); location.reload(); }
-        }
-
-        render();
-    </script>
-</body>
-</html>
+  // 6. دالة رسم كارت المنتج (نفس تصميم موقعك)
+  function renderProductCard(p, id) {
+    const grid = document.getElementById('grid');
+    const card = document.createElement('div');
+    card.className = "product-card";
+    
+    card.innerHTML = `
+      <div class="product-image">
+        <img src="${p.images[0]}" alt="${p.name}">
+      </div>
+      <div class="product-info">
+        <h3>${p.name}</h3>
+        <div class="price-tag">
+          <span class="new-price">${p.price} ج.م</span>
+          ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
+        </div>
+        <button onclick="viewDetails('${id}')" class="buy-btn">التفاصيل</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  }
+</script>
