@@ -18,7 +18,6 @@
             background-color: var(--bg-light);
         }
 
-        /* البار العلوي الأصلي */
         .navbar {
             background-color: white;
             padding: 12px 5%;
@@ -55,7 +54,6 @@
 
         .logo-text { font-weight: 900; font-size: 24px; color: #1b5e20; cursor: pointer; }
 
-        /* قسم الهيرو */
         .hero {
             background-color: var(--main-green);
             color: white;
@@ -72,7 +70,6 @@
             outline: none;
         }
 
-        /* لوحة التحكم */
         #admin-panel {
             display: none;
             background: white;
@@ -90,15 +87,13 @@
 
         .admin-input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
 
-        /* شبكة المنتجات - المربعات */
         .products-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* اتنين جنب بعض في الموبايل */
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             padding: 20px 5%;
         }
 
-        /* للأجهزة الأكبر (كمبيوتر) يظهر 3 أو 4 جنب بعض */
         @media (min-width: 768px) {
             .products-container { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
         }
@@ -113,7 +108,7 @@
             transition: 0.3s;
         }
 
-        .image-box { position: relative; width: 100%; padding-top: 100%; /* مربع كامل */ }
+        .image-box { position: relative; width: 100%; padding-top: 100%; }
         .image-box img {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -127,37 +122,16 @@
         .new-price { color: var(--main-green); font-weight: bold; font-size: 1.1rem; }
         .old-price { color: #999; text-decoration: line-through; font-size: 0.85rem; }
 
-        /* خيارات المقاس واللون */
-        .select-box {
-            font-size: 0.8rem;
-            padding: 5px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            border: 1px solid #eee;
-            background: #fafafa;
-        }
-
         .buy-btn {
             background-color: var(--accent-green);
             color: white;
-            text-decoration: none;
             padding: 10px;
             border-radius: 8px;
             text-align: center;
             font-weight: bold;
-            font-size: 0.9rem;
             border: none;
             cursor: pointer;
         }
-
-        .thumb-nav {
-            display: flex;
-            gap: 4px;
-            padding: 5px;
-            background: #f9f9f9;
-            overflow-x: auto;
-        }
-        .thumb-nav img { width: 35px; height: 35px; object-fit: cover; border-radius: 3px; cursor: pointer; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
@@ -188,21 +162,16 @@
             <input type="text" id="pOldPrice" class="admin-input" placeholder="السعر قبل الخصم">
             <input type="text" id="pImgs" class="admin-input" placeholder="روابط الصور (فاصلة ,)">
             <input type="text" id="pColors" class="admin-input" placeholder="الألوان (فاصلة ,)">
-            <button onclick="addNewProduct()" class="btn-save" style="background:var(--main-green); color:white; border:none; cursor:pointer; border-radius:5px;">إضافة</button>
-            <button onclick="clearAll()" style="background:#d32f2f; color:white; border:none; border-radius:5px; cursor:pointer;">مسح الكل</button>
+            <button onclick="addNewProduct()" style="background:var(--main-green); color:white; border:none; cursor:pointer; border-radius:5px;">إضافة</button>
         </div>
     </div>
 
-    <div class="products-container" id="grid">
-        </div>
-        <script type="module">
- <script type="module">
-  // 1. استيراد مكتبات Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, push, onValue } 
-  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    <div class="products-container" id="grid"></div>
 
-  // 2. إعدادات Firebase الخاصة بمشروعك (تم التحديث ببياناتك)
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyCZp9qxNw7zB9WCL9voaks9YGYhEFyzI3k",
     authDomain: "goat247-f8bf4.firebaseapp.com",
@@ -213,12 +182,20 @@
     measurementId: "G-8BCKL66XDZ"
   };
 
-  // 3. تشغيل Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
   const productsRef = ref(db, 'products');
 
-  // 4. وظيفة إضافة منتج جديد (من لوحة الإدارة)
+  // دالة الدخول للوحة التحكم
+  window.adminCheck = function() {
+    const pass = prompt("أدخل كلمة مرور الإدارة:");
+    if(pass === "123") { // تقدر تغير الباسورد من هنا
+        document.getElementById('admin-panel').style.display = 'block';
+    } else {
+        alert("كلمة مرور خاطئة!");
+    }
+  };
+
   window.addNewProduct = function() {
     const name = document.getElementById('pName').value;
     const price = document.getElementById('pPrice').value;
@@ -234,56 +211,43 @@
         images: images,
         colors: colors
       }).then(() => {
-        alert("مبروك! المنتج اتضاف وه يظهر لكل الزبائن حالاً");
-        // تنظيف الخانات وإخفاء اللوحة
+        alert("تمت الإضافة بنجاح!");
         document.getElementById('pName').value = "";
         document.getElementById('pPrice').value = "";
         document.getElementById('admin-panel').style.display = 'none';
-      }).catch((error) => {
-        console.error("في مشكلة حصلت: ", error);
       });
-    } else {
-      alert("يا ريس لازم تملا الاسم والسعر وصورة واحدة على الأقل");
     }
   };
 
-  // 5. عرض المنتجات وتحديثها تلقائياً عند أي تغيير
   onValue(productsRef, (snapshot) => {
     const data = snapshot.val();
     const grid = document.getElementById('grid');
-    if (!grid) return;
-    
-    grid.innerHTML = ""; // مسح القديم
+    grid.innerHTML = "";
     
     if (data) {
       Object.keys(data).forEach((key) => {
         const p = data[key];
-        renderProductCard(p, key);
+        const card = document.createElement('div');
+        card.className = "card";
+        card.innerHTML = `
+          <div class="image-box">
+            <img src="${p.images[0]}" alt="${p.name}">
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${p.name}</h3>
+            <div class="price-tag">
+              <span class="new-price">${p.price} ج.م</span>
+              ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
+            </div>
+            <button class="buy-btn">اطلب الآن</button>
+          </div>
+        `;
+        grid.appendChild(card);
       });
     } else {
-      grid.innerHTML = "<p style='text-align:center; width:100%; color:#888;'>لا يوجد منتجات معروضة حالياً.</p>";
+      grid.innerHTML = "<p style='text-align:center; width:100%;'>لا توجد منتجات حالياً.</p>";
     }
   });
-
-  // 6. دالة رسم كارت المنتج (نفس تصميم موقعك)
-  function renderProductCard(p, id) {
-    const grid = document.getElementById('grid');
-    const card = document.createElement('div');
-    card.className = "product-card";
-    
-    card.innerHTML = `
-      <div class="product-image">
-        <img src="${p.images[0]}" alt="${p.name}">
-      </div>
-      <div class="product-info">
-        <h3>${p.name}</h3>
-        <div class="price-tag">
-          <span class="new-price">${p.price} ج.م</span>
-          ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
-        </div>
-        <button onclick="viewDetails('${id}')" class="buy-btn">التفاصيل</button>
-      </div>
-    `;
-    grid.appendChild(card);
-  }
 </script>
+</body>
+</html>
