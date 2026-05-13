@@ -30,28 +30,6 @@
             z-index: 1000;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links li a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 5px;
-        }
-
-        .nav-links li a.active {
-            background-color: var(--main-green);
-            color: white;
-        }
-
         .logo-text { font-weight: 900; font-size: 24px; color: #1b5e20; cursor: pointer; }
 
         .hero {
@@ -59,15 +37,6 @@
             color: white;
             padding: 40px 20px;
             text-align: center;
-        }
-
-        .search-box { max-width: 500px; margin: 20px auto 0; }
-        .search-box input {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: none;
-            outline: none;
         }
 
         #admin-panel {
@@ -81,11 +50,35 @@
 
         .admin-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
         }
 
-        .admin-input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .admin-input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+
+        .size-selector {
+            grid-column: 1 / -1;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .size-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
 
         .products-container {
             display: grid;
@@ -95,43 +88,48 @@
         }
 
         @media (min-width: 768px) {
-            .products-container { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+            .products-container { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
         }
 
         .card {
             background: white;
-            border-radius: 12px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             display: flex;
             flex-direction: column;
-            transition: 0.3s;
         }
 
-        .image-box { position: relative; width: 100%; padding-top: 100%; }
+        .image-box { position: relative; width: 100%; padding-top: 100%; background: #eee; }
         .image-box img {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover;
         }
 
-        .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-title { font-size: 1rem; margin: 5px 0; color: #333; height: 40px; overflow: hidden; }
+        .card-body { padding: 15px; display: flex; flex-direction: column; gap: 5px; }
+        .card-title { font-size: 1.1rem; margin: 0; color: #333; font-weight: bold; }
 
-        .price-tag { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .new-price { color: var(--main-green); font-weight: bold; font-size: 1.1rem; }
-        .old-price { color: #999; text-decoration: line-through; font-size: 0.85rem; }
+        .info-row { font-size: 0.9rem; margin-top: 5px; }
+        .info-label { color: #888; font-weight: normal; }
+        .info-values { color: var(--main-green); font-weight: 600; }
+
+        .price-tag { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .new-price { color: var(--main-green); font-weight: bold; font-size: 1.3rem; }
+        .old-price { color: #999; text-decoration: line-through; font-size: 0.95rem; }
 
         .buy-btn {
             background-color: var(--accent-green);
             color: white;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 10px;
             text-align: center;
             font-weight: bold;
-            border: none;
-            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: 0.3s;
         }
+        .buy-btn:hover { background-color: #1ebe57; }
     </style>
 </head>
 <body>
@@ -140,29 +138,29 @@
         <div class="logo-area">
             <span class="logo-text" onclick="adminCheck()">GOAT S</span>
         </div>
-        <ul class="nav-links">
-            <li><a class="active">المنتجات</a></li>
-            <li><a>الطلبات</a></li>
-        </ul>
     </nav>
 
     <div class="hero">
         <h1>GOAT S</h1>
         <p>جودة تستحقها وسعر يناسبك</p>
-        <div class="search-box">
-            <input type="text" placeholder="ابحث عن الموديل...">
-        </div>
     </div>
 
     <div id="admin-panel">
-        <h3>لوحة التحكم 🔒</h3>
+        <h3>لوحة الإدارة - إضافة منتج جديد 🔒</h3>
         <div class="admin-grid">
-            <input type="text" id="pName" class="admin-input" placeholder="اسم المنتج">
-            <input type="text" id="pPrice" class="admin-input" placeholder="السعر">
-            <input type="text" id="pOldPrice" class="admin-input" placeholder="السعر قبل الخصم">
-            <input type="text" id="pImgs" class="admin-input" placeholder="روابط الصور (فاصلة ,)">
-            <input type="text" id="pColors" class="admin-input" placeholder="الألوان (فاصلة ,)">
-            <button onclick="addNewProduct()" style="background:var(--main-green); color:white; border:none; cursor:pointer; border-radius:5px;">إضافة</button>
+            <input type="text" id="pName" class="admin-input" placeholder="اسم المنتج (مثلاً: سنيكرز نايك)">
+            <input type="number" id="pPrice" class="admin-input" placeholder="السعر الحالي">
+            <input type="number" id="pOldPrice" class="admin-input" placeholder="السعر القديم (اختياري)">
+            <input type="text" id="pImgs" class="admin-input" placeholder="روابط الصور (افصل بـ ,)">
+            <input type="text" id="pColors" class="admin-input" placeholder="الألوان (أسود, أبيض, أحمر...)">
+            
+            <div class="size-selector">
+                <label>حدد المقاسات المتاحة:</label>
+                <div class="size-options" id="sizeContainer">
+                    </div>
+            </div>
+
+            <button onclick="addNewProduct()" style="background:var(--main-green); color:white; border:none; cursor:pointer; border-radius:8px; grid-column: 1/-1; padding: 15px; font-weight: bold; font-size: 1.1rem;">نشر المنتج في الموقع</button>
         </div>
     </div>
 
@@ -186,13 +184,26 @@
   const db = getDatabase(app);
   const productsRef = ref(db, 'products');
 
-  // دالة الدخول للوحة التحكم
+  // الرقم بتاعك الصحيح
+  const myWhatsApp = "201032306218";
+
+  // توليد خانات المقاسات من 38 لـ 45
+  const sizeContainer = document.getElementById('sizeContainer');
+  for(let i=38; i<=45; i++) {
+    sizeContainer.innerHTML += `
+      <div class="size-item">
+        <input type="checkbox" class="size-check" value="${i}">
+        <label>${i}</label>
+      </div>
+    `;
+  }
+
   window.adminCheck = function() {
-    const pass = prompt("أدخل كلمة مرور الإدارة:");
-    if(pass === "123") { // تقدر تغير الباسورد من هنا
+    const pass = prompt("كلمة مرور الإدارة:");
+    if(pass === "123") {
         document.getElementById('admin-panel').style.display = 'block';
     } else {
-        alert("كلمة مرور خاطئة!");
+        alert("خطأ!");
     }
   };
 
@@ -201,7 +212,10 @@
     const price = document.getElementById('pPrice').value;
     const oldPrice = document.getElementById('pOldPrice').value;
     const images = document.getElementById('pImgs').value.split(',').map(img => img.trim());
-    const colors = document.getElementById('pColors').value.split(',').map(col => col.trim());
+    const colors = document.getElementById('pColors').value.split(',').map(c => c.trim());
+    
+    // جمع المقاسات المختارة
+    const selectedSizes = Array.from(document.querySelectorAll('.size-check:checked')).map(cb => cb.value);
 
     if(name && price && images[0]) {
       push(productsRef, {
@@ -209,13 +223,14 @@
         price: price,
         oldPrice: oldPrice,
         images: images,
-        colors: colors
+        colors: colors,
+        sizes: selectedSizes
       }).then(() => {
-        alert("تمت الإضافة بنجاح!");
-        document.getElementById('pName').value = "";
-        document.getElementById('pPrice').value = "";
-        document.getElementById('admin-panel').style.display = 'none';
+        alert("تم النشر بنجاح!");
+        location.reload(); // إعادة تحميل لمسح الخانات
       });
+    } else {
+      alert("الاسم والسعر والصورة مطلوبين!");
     }
   };
 
@@ -227,25 +242,39 @@
     if (data) {
       Object.keys(data).forEach((key) => {
         const p = data[key];
-        const card = document.createElement('div');
-        card.className = "card";
-        card.innerHTML = `
-          <div class="image-box">
-            <img src="${p.images[0]}" alt="${p.name}">
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">${p.name}</h3>
-            <div class="price-tag">
-              <span class="new-price">${p.price} ج.م</span>
-              ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
+        const msg = encodeURIComponent(`سلام عليكم، أريد طلب: ${p.name}\nالسعر: ${p.price} ج.م`);
+        const waLink = `https://wa.me/${myWhatsApp}?text=${msg}`;
+
+        grid.innerHTML += `
+          <div class="card">
+            <div class="image-box">
+              <img src="${p.images[0]}" alt="${p.name}">
             </div>
-            <button class="buy-btn">اطلب الآن</button>
+            <div class="card-body">
+              <h3 class="card-title">${p.name}</h3>
+              
+              <div class="info-row">
+                <span class="info-label">المقاسات: </span>
+                <span class="info-values">${p.sizes.join(' - ')}</span>
+              </div>
+              
+              <div class="info-row">
+                <span class="info-label">الألوان: </span>
+                <span class="info-values">${p.colors.join(' - ')}</span>
+              </div>
+
+              <div class="price-tag">
+                <span class="new-price">${p.price} ج.م</span>
+                ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
+              </div>
+              
+              <a href="${waLink}" target="_blank" class="buy-btn">اطلب عبر واتساب</a>
+            </div>
           </div>
         `;
-        grid.appendChild(card);
       });
     } else {
-      grid.innerHTML = "<p style='text-align:center; width:100%;'>لا توجد منتجات حالياً.</p>";
+      grid.innerHTML = "<p style='text-align:center; width:100%; grid-column: 1/-1;'>لا توجد منتجات حالياً.</p>";
     }
   });
 </script>
