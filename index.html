@@ -5,73 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GOAT 24/7 - المتجر الرسمي</title>
     <style>
-        :root { --main-green: #1b5e20; --accent-green: #25d366; --bg-light: #f4f7f6; }
+        :root { --main-green: #1b5e20; --accent-green: #25d366; --bg-light: #f4f7f6; --dark: #333; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg-light); padding-bottom: 50px; }
         
+        /* Navbar & Categories */
         .navbar { background: white; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo-text { font-weight: 900; font-size: 22px; color: var(--main-green); cursor: pointer; user-select: none; }
-        .cart-icon { position: relative; cursor: pointer; font-size: 1rem; background: #eee; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
-
-        #admin-panel { display: none; padding: 20px 5%; background: #fff; border-bottom: 5px solid var(--main-green); border-top: 1px solid #ddd; }
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .admin-input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
-        .size-selector { grid-column: 1 / -1; background: #f0f0f0; padding: 15px; border-radius: 8px; }
-        .size-options { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-        .size-item { display: flex; align-items: center; gap: 5px; background: white; padding: 5px 10px; border-radius: 5px; border: 1px solid #ddd; }
-
-        .products-container { display: grid; grid-template-columns: repeat(1, 1fr); gap: 25px; padding: 20px 5%; }
-        @media (min-width: 768px) { .products-container { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); } }
+        .logo-text { font-weight: 900; font-size: 22px; color: var(--main-green); cursor: pointer; }
         
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
-        .main-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .thumbs-container { display: flex; gap: 8px; padding: 10px; overflow-x: auto; background: #fafafa; border-top: 1px solid #eee; }
-        .thumb-img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; }
-        .thumb-img.active { border-color: var(--main-green); }
+        .category-bar { display: flex; justify-content: center; gap: 15px; padding: 15px; background: white; border-bottom: 1px solid #eee; }
+        .cat-btn { padding: 8px 20px; border-radius: 20px; border: 1px solid var(--main-green); background: white; color: var(--main-green); cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .cat-btn.active { background: var(--main-green); color: white; }
 
-        .card-body { padding: 15px; }
-        .price-tag { margin: 10px 0; font-size: 1.3rem; font-weight: bold; color: var(--main-green); }
-        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-        .chip { border: 1px solid #ddd; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; background: #fff; }
+        /* Admin Panel */
+        #admin-panel { display: none; padding: 20px 5%; background: #fff; border-bottom: 5px solid var(--main-green); }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .admin-input, .admin-select { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+
+        /* Products Grid */
+        .products-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px 5%; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .card-info { padding: 15px; }
+        .card-info h3 { margin: 0; font-size: 1.1rem; color: var(--dark); }
+        .price { color: var(--main-green); font-weight: bold; font-size: 1.2rem; margin-top: 5px; }
+
+        /* Product Modal (The Detail Page) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; overflow-y: auto; }
+        .modal-content { background: white; width: 90%; max-width: 800px; margin: 20px auto; border-radius: 15px; position: relative; padding: 20px; }
+        .close-modal { position: absolute; left: 20px; top: 20px; font-size: 2rem; cursor: pointer; }
+        .modal-flex { display: flex; flex-wrap: wrap; gap: 20px; }
+        .modal-img-side { flex: 1; min-width: 300px; }
+        .modal-info-side { flex: 1.2; min-width: 300px; }
+        .main-modal-img { width: 100%; border-radius: 10px; }
+        .modal-thumbs { display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; }
+        .modal-thumbs img { width: 70px; height: 70px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 2px solid transparent; }
+        .modal-thumbs img.active { border-color: var(--main-green); }
+
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .chip { border: 1px solid #ddd; padding: 8px 15px; border-radius: 8px; cursor: pointer; background: #f9f9f9; }
         .chip.selected { background: var(--main-green); color: white; border-color: var(--main-green); }
+        
+        .reviews-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        .review-item { background: #f4f4f4; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.9rem; }
 
-        .buy-btn { background: var(--accent-green); color: white; padding: 12px; border-radius: 10px; text-align: center; text-decoration: none; display: block; font-weight: bold; border: none; width: 100%; cursor: pointer; margin-top: 10px; }
+        .buy-btn { background: var(--accent-green); color: white; padding: 15px; border-radius: 10px; text-align: center; display: block; font-weight: bold; border: none; width: 100%; cursor: pointer; font-size: 1.1rem; margin-top: 20px; }
 
-        /* ستايل إدارة المنتجات */
-        .manage-card { display: flex; align-items: center; background: #f9f9f9; padding: 10px; margin-bottom: 10px; border-radius: 8px; gap: 10px; border: 1px solid #eee; }
-        .manage-card img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
-        .manage-btns { display: flex; gap: 5px; }
-        .btn-edit { background: #ff9800; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        .btn-del { background: #f44336; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        /* Admin Management List */
+        .manage-card { display: flex; align-items: center; background: #f9f9f9; padding: 10px; margin-bottom: 5px; border-radius: 8px; gap: 10px; }
+        .manage-card img { width: 40px; height: 40px; object-fit: cover; }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
     <span class="logo-text" id="adminTrigger">GOAT 24/7</span>
-    <div class="cart-icon">🛒 سلة الطلبات</div>
+    <div style="font-weight: bold; color: var(--main-green);">المتجر الرسمي</div>
 </nav>
+
+<div class="category-bar">
+    <button class="cat-btn active" onclick="filterProducts('الكل', this)">الكل</button>
+    <button class="cat-btn" onclick="filterProducts('أحذية كرة قدم', this)">أحذية كرة قدم</button>
+    <button class="cat-btn" onclick="filterProducts('أحذية كاجوال', this)">أحذية كاجوال</button>
+</div>
 
 <div id="admin-panel">
     <h3 id="formTitle">إضافة منتج جديد ➕</h3>
-    <input type="hidden" id="editId"> <div class="admin-grid">
+    <input type="hidden" id="editId">
+    <div class="admin-grid">
         <input type="text" id="pName" class="admin-input" placeholder="اسم المنتج">
         <input type="number" id="pPrice" class="admin-input" placeholder="السعر">
+        <select id="pCat" class="admin-select">
+            <option value="أحذية كرة قدم">أحذية كرة قدم</option>
+            <option value="أحذية كاجوال">أحذية كاجوال</option>
+        </select>
         <input type="text" id="pImgs" class="admin-input" placeholder="روابط الصور (فاصلة ,)">
-        <input type="text" id="pColors" class="admin-input" placeholder="الألوان المتاحة (فاصلة ,)">
-        <div class="size-selector">
+        <input type="text" id="pColors" class="admin-input" placeholder="الألوان (فاصلة ,)">
+        <input type="text" id="pReviews" class="admin-input" placeholder="آراء العملاء (فاصلة |)">
+        <div style="grid-column: 1/-1;">
             <label>المقاسات المتاحة:</label>
-            <div class="size-options" id="adminSizeContainer"></div>
+            <div class="chips" id="adminSizeContainer"></div>
         </div>
         <button id="submitBtn" onclick="saveProduct()" style="background:var(--main-green); color:white; border:none; padding:15px; border-radius:8px; cursor:pointer; grid-column: 1/-1; font-weight:bold;">نشر المنتج</button>
         <button id="cancelEdit" onclick="resetForm()" style="display:none; background:#777; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; grid-column: 1/-1;">إلغاء التعديل</button>
     </div>
-    <div style="margin-top:20px; border-top:1px solid #ddd; padding-top:20px;">
-        <h4>المنتجات الحالية ⚙️</h4>
-        <div id="admin-manage-list"></div>
-    </div>
+    <div id="admin-manage-list" style="margin-top:20px;"></div>
 </div>
 
 <div class="products-container" id="grid"></div>
+
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeProduct()">&times;</span>
+        <div class="modal-flex" id="modalDetails"></div>
+    </div>
+</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -90,9 +118,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const productsRef = ref(db, 'products');
-    const myWhatsApp = "201032306218";
+    let allProducts = {};
 
-    // تفعيل الـ 3 ضغطات
+    // تفعيل لوحة الإدارة
     let clickCount = 0;
     document.getElementById('adminTrigger').onclick = () => {
         clickCount++;
@@ -103,73 +131,107 @@
         setTimeout(() => clickCount = 0, 2000);
     };
 
-    // توليد مقاسات الإدارة
+    // توليد المقاسات في الإدارة
     const adminSc = document.getElementById('adminSizeContainer');
     for(let i=38; i<=45; i++) {
-        adminSc.innerHTML += `<div class="size-item"><input type="checkbox" class="admin-size-check" value="${i}" id="sz${i}"><label for="sz${i}">${i}</label></div>`;
+        adminSc.innerHTML += `<div class="chip" onclick="this.classList.toggle('selected')" data-val="${i}">${i}</div>`;
     }
 
-    // دالة واحدة للإضافة والتعديل
     window.saveProduct = () => {
         const id = document.getElementById('editId').value;
         const data = {
             name: document.getElementById('pName').value,
             price: document.getElementById('pPrice').value,
-            images: document.getElementById('pImgs').value.split(',').map(i => i.trim()).filter(i => i !== ""),
-            sizes: Array.from(document.querySelectorAll('.admin-size-check:checked')).map(c => c.value),
-            colors: document.getElementById('pColors').value.split(',').map(c => c.trim()).filter(c => c !== "")
+            category: document.getElementById('pCat').value,
+            images: document.getElementById('pImgs').value.split(',').map(i => i.trim()).filter(i => i),
+            sizes: Array.from(document.querySelectorAll('#adminSizeContainer .chip.selected')).map(c => c.dataset.val),
+            colors: document.getElementById('pColors').value.split(',').map(c => c.trim()).filter(c => c),
+            reviews: document.getElementById('pReviews').value.split('|').map(r => r.trim()).filter(r => r)
         };
 
-        if(!data.name || !data.price || data.images.length === 0) return alert("اكمل البيانات!");
-
-        if(id) {
-            // تحديث منتج موجود
-            update(ref(db, 'products/' + id), data).then(() => { alert("تم التعديل!"); resetForm(); });
-        } else {
-            // إضافة منتج جديد
-            push(productsRef, data).then(() => { alert("تم النشر!"); resetForm(); });
-        }
+        if(id) update(ref(db, 'products/' + id), data).then(() => resetForm());
+        else push(productsRef, data).then(() => resetForm());
     };
 
-    // تعبئة الفورم للتعديل
-    window.editProduct = (id, name, price, imgs, sizes, colors) => {
-        document.getElementById('formTitle').innerText = "تعديل المنتج ✏️";
-        document.getElementById('submitBtn').innerText = "حفظ التغييرات";
-        document.getElementById('cancelEdit').style.display = "block";
+    window.editProduct = (id) => {
+        const p = allProducts[id];
         document.getElementById('editId').value = id;
-        document.getElementById('pName').value = name;
-        document.getElementById('pPrice').value = price;
-        document.getElementById('pImgs').value = imgs;
-        document.getElementById('pColors').value = colors;
-        
-        // تصفير واختيار المقاسات
-        document.querySelectorAll('.admin-size-check').forEach(c => c.checked = false);
-        sizes.split(',').forEach(s => {
-            let chk = document.querySelector(`.admin-size-check[value="${s}"]`);
-            if(chk) chk.checked = true;
+        document.getElementById('pName').value = p.name;
+        document.getElementById('pPrice').value = p.price;
+        document.getElementById('pCat').value = p.category || "أحذية كرة قدم";
+        document.getElementById('pImgs').value = p.images.join(',');
+        document.getElementById('pColors').value = p.colors ? p.colors.join(',') : '';
+        document.getElementById('pReviews').value = p.reviews ? p.reviews.join('|') : '';
+        document.querySelectorAll('#adminSizeContainer .chip').forEach(c => {
+            c.classList.toggle('selected', p.sizes && p.sizes.includes(c.dataset.val));
         });
+        document.getElementById('formTitle').innerText = "تعديل المنتج ✏️";
+        document.getElementById('submitBtn').innerText = "حفظ";
+        document.getElementById('cancelEdit').style.display = "block";
         window.scrollTo(0,0);
     };
 
     window.resetForm = () => {
+        document.getElementById('admin-panel').querySelectorAll('input').forEach(i => i.value = "");
         document.getElementById('editId').value = "";
-        document.getElementById('pName').value = "";
-        document.getElementById('pPrice').value = "";
-        document.getElementById('pImgs').value = "";
-        document.getElementById('pColors').value = "";
         document.getElementById('formTitle').innerText = "إضافة منتج جديد ➕";
         document.getElementById('submitBtn').innerText = "نشر المنتج";
         document.getElementById('cancelEdit').style.display = "none";
-        document.querySelectorAll('.admin-size-check').forEach(c => c.checked = false);
+        document.querySelectorAll('#adminSizeContainer .chip').forEach(c => c.classList.remove('selected'));
     };
 
-    window.deleteProduct = (id) => { if(confirm("حذف المنتج؟")) remove(ref(db, 'products/' + id)); };
+    window.deleteProduct = (id) => { if(confirm("حذف؟")) remove(ref(db, 'products/' + id)); };
 
-    window.changeImg = (btn, newSrc) => {
-        const card = btn.closest('.card');
-        card.querySelector('.main-img').src = newSrc;
-        card.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+    window.filterProducts = (cat, btn) => {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        renderGrid(cat);
+    };
+
+    window.openProduct = (id) => {
+        const p = allProducts[id];
+        const modal = document.getElementById('productModal');
+        const details = document.getElementById('modalDetails');
+        
+        let thumbHtml = p.images.map((img, i) => `<img src="${img}" class="${i===0?'active':''}" onclick="updateModalImg(this, '${img}')">`).join('');
+        let sizeHtml = p.sizes ? p.sizes.map(s => `<div class="chip" onclick="selectChip(this)">${s}</div>`).join('') : 'غير متوفر';
+        let colorHtml = p.colors ? p.colors.map(c => `<div class="chip" onclick="selectChip(this)">${c}</div>`).join('') : 'غير متوفر';
+        let reviewHtml = p.reviews ? p.reviews.map(r => `<div class="review-item">⭐ ${r}</div>`).join('') : 'لا توجد آراء بعد';
+
+        details.innerHTML = `
+            <div class="modal-img-side">
+                <img src="${p.images[0]}" id="mainModalImg" class="main-modal-img">
+                <div class="modal-thumbs">${thumbHtml}</div>
+            </div>
+            <div class="modal-info-side">
+                <h2 style="margin-top:0">${p.name}</h2>
+                <div class="price">${p.price} ج.م</div>
+                <p style="color:#666; font-size:0.9rem;">القسم: ${p.category || 'عام'}</p>
+                
+                <h4>المقاسات:</h4><div class="chips modal-sizes">${sizeHtml}</div>
+                <h4>الألوان:</h4><div class="chips modal-colors">${colorHtml}</div>
+                
+                <div class="reviews-section">
+                    <h4>آراء العملاء:</h4>
+                    ${reviewHtml}
+                </div>
+                
+                <button class="buy-btn" onclick="sendOrder('${id}')">اطلب الآن عبر واتساب</button>
+            </div>
+        `;
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+    };
+
+    window.closeProduct = () => {
+        document.getElementById('productModal').style.display = "none";
+        document.body.style.overflow = "auto";
+    };
+
+    window.updateModalImg = (el, src) => {
+        document.getElementById('mainModalImg').src = src;
+        el.parentElement.querySelectorAll('img').forEach(img => img.classList.remove('active'));
+        el.classList.add('active');
     };
 
     window.selectChip = (btn) => {
@@ -177,53 +239,49 @@
         btn.classList.add('selected');
     };
 
-    window.sendOrder = (id, name, price) => {
-        const card = document.getElementById(`prod-${id}`);
-        const size = card.querySelector('.size-chips .chip.selected')?.innerText || "غير محدد";
-        const color = card.querySelector('.color-chips .chip.selected')?.innerText || "غير محدد";
-        const msg = `طلب جديد:\nالمنتج: ${name}\nالسعر: ${price}\nالمقاس: ${size}\nاللون: ${color}`;
-        window.open(`https://wa.me/${myWhatsApp}?text=${encodeURIComponent(msg)}`);
+    window.sendOrder = (id) => {
+        const p = allProducts[id];
+        const size = document.querySelector('.modal-sizes .chip.selected')?.innerText || "غير محدد";
+        const color = document.querySelector('.modal-colors .chip.selected')?.innerText || "غير محدد";
+        const msg = `طلب جديد من الموقع:\nالمنتج: ${p.name}\nالسعر: ${p.price}\nالمقاس: ${size}\nاللون: ${color}`;
+        window.open(`https://wa.me/201032306218?text=${encodeURIComponent(msg)}`);
     };
 
-    onValue(productsRef, (snapshot) => {
-        const data = snapshot.val();
+    function renderGrid(filter = 'الكل') {
         const grid = document.getElementById('grid');
         const adminList = document.getElementById('admin-manage-list');
         grid.innerHTML = ""; adminList.innerHTML = "";
 
-        if(data) {
-            Object.keys(data).forEach(id => {
-                const p = data[id];
-                let thumbs = p.images.map((img, idx) => `<img src="${img}" class="thumb-img ${idx===0?'active':''}" onclick="changeImg(this, '${img}')">`).join('');
-                let sChips = p.sizes ? p.sizes.map(s => `<div class="chip" onclick="selectChip(this)">${s}</div>`).join('') : '';
-                let cChips = p.colors ? p.colors.map(c => `<div class="chip" onclick="selectChip(this)">${c}</div>`).join('') : '';
+        Object.keys(allProducts).forEach(id => {
+            const p = allProducts[id];
+            
+            // لستة الإدارة (دايماً بتظهر فيها كل حاجة)
+            adminList.innerHTML += `
+                <div class="manage-card">
+                    <img src="${p.images[0]}">
+                    <span style="flex-grow:1">${p.name}</span>
+                    <button onclick="editProduct('${id}')" style="background:#ff9800; color:white; border:none; padding:5px; border-radius:5px;">تعديل</button>
+                    <button onclick="deleteProduct('${id}')" style="background:#f44336; color:white; border:none; padding:5px; border-radius:5px;">حذف</button>
+                </div>`;
 
+            // الشبكة الرئيسية (بتتأثر بالفلتر)
+            if (filter === 'الكل' || p.category === filter) {
                 grid.innerHTML += `
-                    <div class="card" id="prod-${id}">
-                        <img src="${p.images[0]}" class="main-img">
-                        <div class="thumbs-container">${thumbs}</div>
-                        <div class="card-body">
-                            <h3>${p.name}</h3>
-                            <div class="price-tag">${p.price} ج.م</div>
-                            <div class="chips size-chips">${sChips}</div>
-                            <div class="chips color-chips">${cChips}</div>
-                            <button onclick="sendOrder('${id}', '${p.name}', '${p.price}')" class="buy-btn">تأكيد الطلب</button>
-                        </div>
-                    </div>`;
-
-                adminList.innerHTML += `
-                    <div class="manage-card">
+                    <div class="card" onclick="openProduct('${id}')">
                         <img src="${p.images[0]}">
-                        <div style="flex-grow:1; font-size:14px;"><b>${p.name}</b></div>
-                        <div class="manage-btns">
-                            <button class="btn-edit" onclick="editProduct('${id}', '${p.name}', '${p.price}', '${p.images.join(',')}', '${p.sizes?p.sizes.join(','):''}', '${p.colors?p.colors.join(','):''}')">تعديل</button>
-                            <button class="btn-del" onclick="deleteProduct('${id}')">حذف</button>
+                        <div class="card-info">
+                            <h3>${p.name}</h3>
+                            <div class="price">${p.price} ج.م</div>
                         </div>
                     </div>`;
-            });
-        }
+            }
+        });
+    }
+
+    onValue(productsRef, (snapshot) => {
+        allProducts = snapshot.val() || {};
+        renderGrid();
     });
 </script>
 </body>
 </html>
-
